@@ -1,0 +1,64 @@
+<head>
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    #main {
+      margin: 2rem;
+    }
+
+    .big {
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero is-success">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">Yelp Review vs. Sentiment Analysis: Taco Bell Edition</h1>
+        <h2 class="subtitle">Sentiment analysis demo</h2>
+	<h3 class="subtitle"><a href="https://www.yelp.com/biz/taco-bell-cantina-madison-2">Yelp Link</a></h3>
+      </div>
+    </div>
+  </section>
+  <div id="main">
+    <table class="table is-fullwidth">
+      <thead>
+        <tr>
+          <th>Yelp Comment</th>
+          <th>Yelp Rating</th>
+          <th>Sentiment Analysis Rating</th>
+        </tr>
+      </thead>
+      <tbody id="sentimentTable"></tbody>
+    </table>
+  </div>
+  <script>
+    var request = new XMLHttpRequest();
+    request.open("GET", "/data", true);
+
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        var table = document.getElementById("sentimentTable");
+        var data = JSON.parse(request.responseText);
+        data.forEach(function(comment) {
+          var newRow = table.insertRow(table.rows.length);
+          newRow.insertCell(0).innerHTML = comment.review;
+          newRow.insertCell(1).innerHTML = comment.rating;
+          newRow.insertCell(2).innerHTML = comment.sentimentRating;
+        });
+      } else {
+        alert("Could not retrieve data");
+      }
+    };
+
+    request.onerror = function() {
+      alert("Could not retrieve data");
+    };
+
+    request.send();
+  </script>
+</body>
